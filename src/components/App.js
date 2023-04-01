@@ -5,27 +5,25 @@ const App = () => {
   const [category, setCategory] = useState("general");
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+ const API_KEY="";
 
-  const API_KEY = "";
-
-  const changeFunction = (e)=>{
-    setCategory(e.target.value);
-  } 
-
-  useEffect(()=>{
-    setLoading(true);
-    fetch(`https://gnews.io/api/v4/topheadlines?category=${category}&lang=en&country=us&max=10&apikey=${API_KEY}`)
-    .then(res=>res.json())
-    .then((res)=>{
-      setNewsData(res.articles)
-      console.log(res)
-    }).then(()=>setLoading(false));
-  },[category])
-
+ const changeFunction=(e)=>
+ {
+  setCategory(e.target.value);
+ }
+ useEffect(()=>
+ {
+   setLoading(true);
+   fetch(`https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&max=10&apikey=${API_KEY}`).then(res=>res.json())
+   .then((res)=>{
+    setNewsData(res.articles)
+    console.log(res);
+  }).then(()=>setLoading(false));
+ },[category])
   return (
     <div id="main">
       <h1 className='heading'>Top 10 {category} news.</h1>
-      <select value={category}>
+      <select value={category} onChange={changeFunction}>
         <option value="general">General</option>
         <option value="business">Business</option>
         <option value="sports">Sports</option>
@@ -34,11 +32,9 @@ const App = () => {
         <option value="entertainment">Entertainment</option>
         <option value="science">Science</option>
       </select>
-      {loading &&
-      <p className='loader'>Loading...</p>
-      }
-      {!loading && <ol>
-        { newsData.map((e,i)=>
+      {loading && <p className='loader'>Loading...</p>}
+      {!loading &&<ol>
+       { newsData.map((e,i)=>
         {
           return (<li key={i}>
           <img className='news-img' src={e.image} alt=""/>
@@ -52,11 +48,7 @@ const App = () => {
         </li>)
         })
       }
-      </ol>
-      }
+      </ol>}
     </div>
   )
 }
-
-
-export default App;
